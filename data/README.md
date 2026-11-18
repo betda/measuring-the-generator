@@ -68,5 +68,5 @@ Every file is checked before it is copied:
 
 - arrays must be on an allow list and numeric, and must not have the shape of an embedding;
 - JSON and CSV files, and the JSON Lines logs of `runs/` and `config/`, must not have fields or columns that hold data text (also under longer names, such as `pregunta_entrenamiento`), sentences that are not Spanish prose, or English text: the data texts are in English and the study's notes are in Spanish;
-- every exported file is compared with the study's texts (the questions, answers and candidates of the evaluation sets and the negatives of the T-gen panel), and a file that shares six consecutive words with them is skipped;
+- every exported file is compared with the study's texts (the questions, answers and candidates of the evaluation sets and the negatives of the T-gen panel), and a file that shares six consecutive words with them, or holds one of their strings of three to five words, is skipped;
 - files that name the annotators' labeling sheets are skipped.
