@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+/release_data/
+/release_data.tar.xz

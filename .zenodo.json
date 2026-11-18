@@ -1,0 +1,25 @@
+{
+  "title": "Measuring the Generator, Not the State: code, registration and data",
+  "upload_type": "software",
+  "access_right": "open",
+  "license": "apache-2.0",
+  "description": "<p>Code, notebooks, dated registration files and data of the article <em>Measuring the Generator, Not the State: The Validity of LLM-Written Negatives for State–Action Scorers</em> (Universidad Autónoma de Ciudad Juárez; submitted to the Journal of Artificial Intelligence Research).</p><p>The study trains the two heads of a state–action scorer on a frozen Qwen3-8B with 15 training objectives under one protocol, audits the evaluation sets with probes that do not see the state, and measures how the gain from hard negatives written by Gemini transfers to negatives written by a panel of 23 generators.</p><p>The data are released without any text of Nemotron-CC v2.1, of CLM's negatives or of the generated negatives; <code>data/README.md</code> describes them. Code: Apache License 2.0. Data and documents: CC BY 4.0 (<code>LICENSE-DATA.md</code>).</p>",
+  "creators": [
+    {"name": "Davis Ortiz, Alberto", "orcid": "0000-0001-6840-5563", "affiliation": "Universidad Autónoma de Ciudad Juárez"},
+    {"name": "Maldonado Robles, Martin Uriel", "orcid": "0009-0003-7643-5959", "affiliation": "Universidad Autónoma de Ciudad Juárez"},
+    {"name": "Mendoza Zubia, Andres", "orcid": "0009-0003-1326-5948", "affiliation": "Universidad Autónoma de Ciudad Juárez"},
+    {"name": "Olvera Gonzalez, Julian Alberto", "orcid": "0009-0003-7628-2681", "affiliation": "Universidad Autónoma de Ciudad Juárez"},
+    {"name": "Puga Mota, Fernando", "orcid": "0009-0008-2590-431X", "affiliation": "Universidad Autónoma de Ciudad Juárez"},
+    {"name": "Romero López, Jesús Omar", "orcid": "0009-0007-7829-8475", "affiliation": "Universidad Autónoma de Ciudad Juárez"},
+    {"name": "Zamora Martínez, Ulises Elian", "orcid": "0009-0006-1167-4758", "affiliation": "Universidad Autónoma de Ciudad Juárez"}
+  ],
+  "keywords": [
+    "hard negatives",
+    "synthetic negatives",
+    "contrastive learning",
+    "evaluation validity",
+    "shortcut learning",
+    "LLM agents",
+    "verifiers"
+  ]
+}
