@@ -29,14 +29,15 @@ Rules (the release must not redistribute the texts of Nemotron-CC, of CLM's nega
 - ``.npy``: only names on an allow list, with a numeric dtype, and without an embedding-sized last axis;
 - ``.json`` / ``.csv`` / the ``.jsonl`` logs of ``runs/`` and ``config/``: skipped if a field or column that holds data
   text (question, answer, candidates, prompt, raw output, ...; also as part of a longer name, such as
-  ``pregunta_entrenamiento``) has a value of three or more words; if a string is a sentence (15 or more words) that is
+  ``pregunta_entrenamiento``) has a value of three or more words (for the one-letter names ``q`` and ``a``, also used
+  for the two arms of the pairwise tables, only if the value reads as English or ends in a question mark); if a string is a sentence (15 or more words) that is
   not Spanish prose; or if a string of five or more words reads as English (two or more English function words and no
   Spanish ones). The data texts are in English and the study's notes and decision rules are in Spanish, so the notes
   are kept and the texts are not. Configuration, freeze and rule files may hold English prompt templates (Appendix B
   of the article); for them only the overlap check below applies;
 - every exported text-like file is also compared with the study's texts (the questions, answers and candidates in
   ``results/PRE/textos/*.jsonl`` and the panel's ``kept.jsonl`` and ``items_text.jsonl``, when they exist): a file
-  that shares a run of six words with them is skipped;
+  that shares a run of six words with them, or that holds one of their strings of three to five words, is skipped;
 - files that name the annotators' labeling sheets are skipped, so that the annotators stay anonymous;
 - everything else (checkpoints, embeddings, token IDs, generations, prompts, spreadsheets, reports in Markdown, the
   BM25 vocabulary of the training answers, figures and server logs) is skipped.
@@ -154,6 +155,7 @@ class Exporter:
         self.root, self.out, self.with_scores = root, out, with_scores
         self.included, self.excluded = [], []      # (relpath, reason)
         self.text_shingles: set = set()
+        self.text_short: set = set()             # the study's strings of 3 to 5 words, normalized
 
     # ---------------------------------------------------------------- texts to compare against
     def text_sources(self) -> list:
@@ -181,13 +183,20 @@ class Exporter:
                     except json.JSONDecodeError:
                         continue
                     for _, s in strings_in(rec):
-                        if len(words(s)) >= SHINGLE:
+                        w = words(s)
+                        if len(w) >= SHINGLE:
                             self.text_shingles.update(shingles(s))
+                            n += 1
+                        elif len(w) >= 3:
+                            self.text_short.add(" ".join(w))
                             n += 1
         return n
 
     def shares_text(self, s: str) -> bool:
-        if not self.text_shingles or len(words(s)) < SHINGLE:
+        w = words(s)
+        if 3 <= len(w) < SHINGLE:
+            return " ".join(w) in self.text_short
+        if not self.text_shingles or len(w) < SHINGLE:
             return False
         return any(h in self.text_shingles for h in shingles(s))
 
@@ -201,7 +210,8 @@ class Exporter:
                 return "names the labeling sheets (they identify the annotators)"
             if not prose_ok:
                 toks = tokens(s)
-                if is_text_key(key) and len(toks) >= 3:
+                if is_text_key(key) and len(toks) >= 3 and (
+                        len(key) > 1 or function_words(toks)[1] > 0 or s.rstrip().endswith("?")):
                     return f"text field '{key}'"
                 if len(toks) >= SHORT_WORDS:
                     es, en = function_words(toks)
