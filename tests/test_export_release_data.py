@@ -91,8 +91,14 @@ def build_study(root):
     # pairwise tables: columns A and B hold arm names, not answers
     w_text(f"{root}/results/F1/all_vs_all/pairwise_tgem_top1.csv", "A,B,diff,p_holm\ninfonce,infonce_hn,-0.021,0.003\n")
     w_text(f"{root}/results/F1/ejemplos_a.csv", f"id,a\n0,{ANSWER}\n")
+    # pairwise tables whose arms have labels of several words (in Spanish): kept
+    w_text(f"{root}/results/F2b/B1/pairwise_tgem_top1.csv",
+           "A,B,diff,p_holm\ninfonce_lse R2 (HN auxiliar),infonce_hn con HN solos,-0.02,0.01\n")
+    # a short answer of the study quoted as is: only the exact match with the study's short strings can catch it
+    w_json(f"{root}/results/F3/caso_corto.json", {"caso": "young's double slit experiment", "x": 1})
     pre = f"{root}/results/PRE"
-    w_text(f"{pre}/textos/confirm.jsonl", json.dumps({"i": "tgem:0", "q": SENTINEL, "a": ANSWER, "cands": [ANSWER]}) + "\n")
+    w_text(f"{pre}/textos/confirm.jsonl", json.dumps({"i": "tgem:0", "q": SENTINEL, "a": ANSWER, "cands": [ANSWER]}) + "\n" +
+           json.dumps({"i": "tgem:1", "q": "Which experiment does the text describe?", "a": "Young's double slit experiment"}) + "\n")
     w_json(f"{pre}/b1_calidad/etiquetas/clave.json", {"creado": "2026-10-11", "clave": {"e001": "tgem:0"}})
     w_text(f"{pre}/b1_calidad/etiquetas/ETIQUETAR_200_items.csv",
            f"id,pregunta,oro,n,candidato,es_correcta(0/1),notas\ne001,{SENTINEL},{ANSWER},1,{ANSWER},,\n")
@@ -146,6 +152,7 @@ def test_export_keeps_numbers_and_drops_texts(tmp_path):
         "results/F3/all_vs_all/all_vs_all.json", "results/F3/all_vs_all/tabla.csv",
         "results/F1/all_vs_all/pairwise_tgem_top1.csv", "results/F3/C2/C2.json", "config/F0_DECISIONES.jsonl",
         "runs/F1/infonce/arm_log.jsonl", "data/eval/tgen/confirm/panel_order.npy",
+        "results/F2b/B1/pairwise_tgem_top1.csv",
         "results/PRE/b1_calidad/etiquetas/clave.json", "results/PRE/b0_extraccion/REGLA.json",
         "logs/pip_freeze.txt", "labels/judge_labels.csv",
     }
@@ -160,12 +167,14 @@ def test_export_keeps_numbers_and_drops_texts(tmp_path):
         "results/PRE/b1_calidad/juez/juez_raw.jsonl", "results/PRE/b1_calidad/calidad.json",
         "results/PRE/b3_referencias/bm25_corpus.json", "results/F3/C2c/C2c.json", "results/F1/ejemplos_a.csv",
         "results/F3/nota_en.json", "results/F3/caso_en.json", "results/PRE/b1_calidad/fuga/fuga.json",
-        "results/F3/cita_panel.json", "results/PRE/b1_calidad/etiquetas/acuerdo.json",
+        "results/F3/cita_panel.json", "results/PRE/b1_calidad/etiquetas/acuerdo.json", "results/F3/caso_corto.json",
     }
     assert must_skip <= skipped, must_skip - skipped
     why = dict(ex.excluded)
     assert why["results/F3/C2c/C2c.json"].startswith("shares text")
     assert why["results/F3/cita_panel.json"].startswith("shares text")
+    assert why["results/F3/caso_corto.json"].startswith("shares text")
+    assert why["results/F1/ejemplos_a.csv"] == "text column 'a'"
     assert why["results/F3/nota_en.json"] == "contains sentences that are not the study's notes in Spanish"
     assert why["results/F3/caso_en.json"] == "contains English text"
     assert why["results/PRE/b1_calidad/fuga/fuga.json"] == "text field 'pregunta_entrenamiento'"
