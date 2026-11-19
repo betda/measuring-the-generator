@@ -52,7 +52,7 @@ def build_study(root):
     w_npy(f"{root}/data/eval/test/c0000_q.npy", np.random.rand(n, 4096).astype(np.float16))
     w_npy(f"{root}/data/eval/test/c0000_a.npy", np.random.rand(n, 4096).astype(np.float16))
     w_npy(f"{root}/data/eval/test/c0000_n.npy", np.random.rand(n, 10, 4096).astype(np.float16))
-    w_json(f"{root}/data/eval/test/c0000_meta.json", {"doc_id": [f"0f8c2a6e-{i:04d}" for i in range(n)],
+    w_json(f"{root}/data/eval/test/c0000_meta.json", {"doc_id": [f"0f8c2a6e-{i:04d}-4c1b-9a77-1b2c3d4e5f60" for i in range(n)],
                                                       "pair_idx": list(range(n)), "row": list(range(n))})
     w_text(f"{root}/data/eval/test/c0000.done", "ok")
     w_npy(f"{root}/data/eval/test/rand_idx.npy", np.zeros((n, 10), np.int64))
@@ -86,7 +86,7 @@ def build_study(root):
     w_npy(f"{r}/eval/items_tgen_phi4_14b.npy", np.arange(n))
     # results of the phases and of the post hoc block
     w_json(f"{root}/results/F3/all_vs_all/all_vs_all.json", {"tmine": {"InfoNCE": 0.959}})
-    w_text(f"{root}/results/F3/all_vs_all/tabla.csv", "brazo,tmine\nInfoNCE,0.959\n")
+    w_text(f"{root}/results/F3/all_vs_all/tabla.csv", "brazo,tmine,ic95\nInfoNCE,0.959,\"[17.0, 19.5]\"\n")
     w_text(f"{root}/results/F3/RESUMEN_F3.md", f"# F3\n\nExample: {SENTINEL}\n")
     # pairwise tables: columns A and B hold arm names, not answers
     w_text(f"{root}/results/F1/all_vs_all/pairwise_tgem_top1.csv", "A,B,diff,p_holm\ninfonce,infonce_hn,-0.021,0.003\n")
@@ -98,7 +98,9 @@ def build_study(root):
     w_json(f"{root}/results/F3/caso_corto.json", {"caso": "young's double slit experiment", "x": 1})
     pre = f"{root}/results/PRE"
     w_text(f"{pre}/textos/confirm.jsonl", json.dumps({"i": "tgem:0", "q": SENTINEL, "a": ANSWER, "cands": [ANSWER]}) + "\n" +
-           json.dumps({"i": "tgem:1", "q": "Which experiment does the text describe?", "a": "Young's double slit experiment"}) + "\n")
+           json.dumps({"i": "tgem:1", "q": "Which experiment does the text describe?", "a": "Young's double slit experiment",
+                       "doc_id": "0f8c2a6e-0001-4c1b-9a77-1b2c3d4e5f60"}) + "\n" +
+           json.dumps({"i": "tgem:2", "q": "What range does the study report?", "a": "17.0, 19.5"}) + "\n")
     w_json(f"{pre}/b1_calidad/etiquetas/clave.json", {"creado": "2026-10-11", "clave": {"e001": "tgem:0"}})
     w_text(f"{pre}/b1_calidad/etiquetas/ETIQUETAR_200_items.csv",
            f"id,pregunta,oro,n,candidato,es_correcta(0/1),notas\ne001,{SENTINEL},{ANSWER},1,{ANSWER},,\n")
