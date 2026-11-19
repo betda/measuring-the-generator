@@ -37,7 +37,8 @@ Rules (the release must not redistribute the texts of Nemotron-CC, of CLM's nega
   of the article); for them only the overlap check below applies;
 - every exported text-like file is also compared with the study's texts (the questions, answers and candidates in
   ``results/PRE/textos/*.jsonl`` and the panel's ``kept.jsonl`` and ``items_text.jsonl``, when they exist): a file
-  that shares a run of six words with them, or that holds one of their strings of three to five words, is skipped;
+  that shares a run of six words with them, or that holds one of their phrases of three to five words (identifiers,
+  dates and numbers are not phrases), is skipped;
 - files that name the annotators' labeling sheets are skipped, so that the annotators stay anonymous;
 - everything else (checkpoints, embeddings, token IDs, generations, prompts, spreadsheets, reports in Markdown, the
   BM25 vocabulary of the training answers, figures and server logs) is skipped.
@@ -155,7 +156,7 @@ class Exporter:
         self.root, self.out, self.with_scores = root, out, with_scores
         self.included, self.excluded = [], []      # (relpath, reason)
         self.text_shingles: set = set()
-        self.text_short: set = set()             # the study's strings of 3 to 5 words, normalized
+        self.text_short: set = set()             # the study's phrases of 3 to 5 words, normalized
 
     # ---------------------------------------------------------------- texts to compare against
     def text_sources(self) -> list:
@@ -187,7 +188,7 @@ class Exporter:
                         if len(w) >= SHINGLE:
                             self.text_shingles.update(shingles(s))
                             n += 1
-                        elif len(w) >= 3:
+                        elif len(w) >= 3 and len(tokens(s)) >= 3:      # a phrase, not an identifier or a number
                             self.text_short.add(" ".join(w))
                             n += 1
         return n
@@ -195,7 +196,7 @@ class Exporter:
     def shares_text(self, s: str) -> bool:
         w = words(s)
         if 3 <= len(w) < SHINGLE:
-            return " ".join(w) in self.text_short
+            return len(tokens(s)) >= 3 and " ".join(w) in self.text_short
         if not self.text_shingles or len(w) < SHINGLE:
             return False
         return any(h in self.text_shingles for h in shingles(s))
