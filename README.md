@@ -1,5 +1,7 @@
 # Measuring the Generator, Not the State: code, registration and data
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24382722.svg)](https://doi.org/10.5281/zenodo.24382722)
+
 Code and materials of the article *Measuring the Generator, Not the State: The Validity of LLM-Written Negatives for State–Action Scorers* (Davis Ortiz, Maldonado Robles, Mendoza Zubia, Olvera Gonzalez, Puga Mota, Romero López and Zamora Martínez; Universidad Autónoma de Ciudad Juárez; submitted to the *Journal of Artificial Intelligence Research*).
 
 The study trains the two heads of a state–action scorer on a frozen Qwen3-8B, as in CLM, with 15 training objectives under one protocol. It audits the evaluation sets with probes that do not see the state and with shuffled states, and measures how the gain from hard negatives written by Gemini transfers to negatives written by a panel of 23 generators. The decision rules were fixed before a sealed split was opened.
@@ -75,7 +77,7 @@ The test of the data export (`tests/test_export_release_data.py`) needs only num
 
 ## Data release
 
-The data of the study are released without any text, under CC BY 4.0, in `data/release/`: the archive `release_data.tar.xz` (about 13 MB), cut into parts of 9.5 MB to fit GitHub's limits, with its SHA-256 sums and the export report. To join the parts, check them and extract the archive:
+The data of the study are released without any text, under CC BY 4.0, in `data/release/`: the archive `release_data.tar.xz` (13.7 MB), cut into parts of 9.5 MB to fit GitHub's limits, with its SHA-256 sums and the export report. To join the parts, check them and extract the archive:
 
 ```bash
 python release/join_release_data.py        # extracts ./release_data/
@@ -121,3 +123,5 @@ Third-party data and models are not included and keep their own terms.
 ## Citation
 
 See `CITATION.cff`. Until the article is published, cite it as: Davis Ortiz, A., Maldonado Robles, M. U., Mendoza Zubia, A., Olvera Gonzalez, J. A., Puga Mota, F., Romero López, J. O., and Zamora Martínez, U. E. *Measuring the Generator, Not the State: The Validity of LLM-Written Negatives for State–Action Scorers*. Manuscript submitted to the Journal of Artificial Intelligence Research.
+
+This repository is archived at Zenodo. The version cited in the article is v1.0.0, [doi:10.5281/zenodo.24382723](https://doi.org/10.5281/zenodo.24382723); [doi:10.5281/zenodo.24382722](https://doi.org/10.5281/zenodo.24382722) always points to the latest version.

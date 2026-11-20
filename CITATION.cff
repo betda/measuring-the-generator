@@ -4,6 +4,15 @@ title: "Measuring the Generator, Not the State: code, registration and data"
 type: software
 license: Apache-2.0
 version: 1.0.0
+doi: 10.5281/zenodo.24382722
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.24382722
+    description: "Zenodo archive, all versions"
+  - type: doi
+    value: 10.5281/zenodo.24382723
+    description: "Zenodo archive, version 1.0.0"
+repository-code: "https://github.com/betda/measuring-the-generator"
 authors:
   - family-names: "Davis Ortiz"
     given-names: "Alberto"
